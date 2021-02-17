@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  api:
+    container_name: aspnetcore-api
+    image: aspnetcore-build
+    build: .
+    ports:
+      - 8000:80
+    depends_on:
+      - db
+    networks:
+      - aspnetcore
+  db:
+    container_name: aspnetcore-database
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 5433:5432
+    networks:
+      - aspnetcore
+  pgadmin:
+    container_name: aspnetcore-database-admin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: kelvi.dalmazo@linx.com.br
+      PGADMIN_DEFAULT_PASSWORD: docker
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 8080:80
+    networks:
+      - aspnetcore
+    depends_on:
+      - db
+
+networks:
+  "aspnetcore":
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
