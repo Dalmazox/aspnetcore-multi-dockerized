@@ -1,22 +1,35 @@
 ﻿using Docker.Domain.Entities;
-using Docker.Domain.Interfaces.Repositories;
 using Docker.Domain.Interfaces.Services;
+using Docker.Domain.Interfaces.UoW;
 using System;
+using System.Collections.Generic;
 
 namespace Docker.Application.Services
 {
-    public class UsuarioService : Service<Usuario>, IUsuarioService
+    public class UsuarioService : IUsuarioService
     {
-        public UsuarioService(IUsuarioRepository repository) : base(repository) { }
+        private readonly IUnitOfWork _uow;
 
-        public override void Store(Usuario entity)
+        public UsuarioService(IUnitOfWork uow)
         {
-            var usuario = _repository.One(u => u.Email == entity.Email);
+            _uow = uow;
+        }
+
+        public IEnumerable<Usuario> List()
+        {
+            return _uow.Usuarios.List();
+        }
+
+        public void Store(Usuario model)
+        {
+            var usuario = _uow.Usuarios.One(u => u.Email == model.Email);
 
             if (usuario is not null)
-                throw new Exception("E-mail já cadastrado");
+                throw new Exception("E-mail já em uso");
 
-            base.Store(entity);
+            _uow.BeginTransaction();
+            _uow.Usuarios.Store(model);
+            _uow.Commit();
         }
     }
 }

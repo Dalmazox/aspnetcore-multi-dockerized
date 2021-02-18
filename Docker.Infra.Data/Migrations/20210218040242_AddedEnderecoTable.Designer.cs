@@ -3,15 +3,17 @@ using System;
 using Docker.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Docker.Infra.Data.Migrations
 {
     [DbContext(typeof(DockerContext))]
-    partial class DockerContextModelSnapshot : ModelSnapshot
+    [Migration("20210218040242_AddedEnderecoTable")]
+    partial class AddedEnderecoTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

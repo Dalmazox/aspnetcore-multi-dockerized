@@ -9,5 +9,6 @@ namespace Docker.Domain.Interfaces.Repositories
         IEnumerable<T> List();
         void Store(T entity);
         T One(Expression<Func<T, bool>> exp);
+        T One(Expression<Func<T, bool>> exp, params string[] includes);
     }
 }

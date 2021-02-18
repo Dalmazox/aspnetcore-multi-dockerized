@@ -2,8 +2,10 @@ using Docker.Api.Validators;
 using Docker.Application.Services;
 using Docker.Domain.Interfaces.Repositories;
 using Docker.Domain.Interfaces.Services;
+using Docker.Domain.Interfaces.UoW;
 using Docker.Infra.Data.Context;
 using Docker.Infra.Data.Repositories;
+using Docker.Infra.Data.UoW;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +41,7 @@ namespace Docker.Api
 
             services
                 .AddDbContext<DockerContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Default")))
+                .AddScoped<IUnitOfWork, UnitOfWork>()
                 .AddScoped<IUsuarioService, UsuarioService>()
                 .AddScoped<IUsuarioRepository, UsuarioRepository>();
         }
